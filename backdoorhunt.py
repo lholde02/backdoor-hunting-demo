@@ -1,9 +1,8 @@
 import argparse
-import scapy.all as scapy
-import socket as s
-import subprocess
-import sys  #for printing one character at a time
-import time #for sleeping between scans in learning mode
+import socket as s # For scanning ports on your computer
+import subprocess # For clearning the terminal
+import sys  # For printing one character at a time
+import time # For sleeping between scans in learning mode
 
 # Number of valid ports on machines
 NUM_PORTS = 65535
@@ -15,7 +14,7 @@ PROGRESS_BAR = NUM_PORTS/10
 GAP_TIME = 10 # in seconds, 60 sec/ 1 minute
 RUNNING_TIME = 3600 # runs for an hour total
 
-# Handling the three possible modes by having two optional args
+# Handling the three possible modes by having two optional args, defaults to user-mediated mode
 parser = argparse.ArgumentParser(description='A tool for detecting the more obvious backdoors by looking for any ports that should not be open')
 parser.add_argument('--learning', help='Acticates learning mode', action="store_true")
 parser.add_argument('-auto', metavar='PORTSFILE', help='Activates autonomous monitoring mode, needs a txt file of commonly used ports')
@@ -25,20 +24,20 @@ subprocess.call('clear', shell=True)
 
 # Subfunction for scanning your own computer for open ports
 def self_scan(quiet): # Quiet is a boolean which indicates if this function is in quiet mode
-    i = 1
+    port_num = 1
     list = []
     if not quiet: # Only prints out the progress bar if NOT in quiet mode, i.e. quiet is False
         print 'Progress |',
     # Loop through and scan each potentially open port
-    while i <= NUM_PORTS:
+    while port_num <= NUM_PORTS:
         # Sockets are used to connect to another computer
         sock = s.socket(s.AF_INET, s.SOCK_STREAM)
         sock.settimeout(2) #2 Second Timeout
-        result = sock.connect_ex(('127.0.0.1', i)) #Scanning yourself
+        result = sock.connect_ex(('127.0.0.1', port_num)) # Scanning yourself
         if result == 0: # If the port is open, appends it to the list
-            list.append(i)
-        i = i + 1 # Increment port number
-        if (i % PROGRESS_BAR) == 0: # Increases the level on the loading bar after 10% more of the scans are complete
+            list.append(port_num)
+        port_num = port_num + 1 # Increment port number
+        if (port_num % PROGRESS_BAR) == 0: # Increases the level on the loading bar after 10% more of the scans are complete
             if not quiet:
                 sys.stdout.write('x')
                 sys.stdout.flush()
