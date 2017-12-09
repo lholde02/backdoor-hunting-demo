@@ -3,6 +3,8 @@ A quick program to help developers and security professionals think about how to
 
 I hope this will inspire others to think about what systems they have in place to look for suspicious activity on their own computers and networks.
 
+** Note: this program was designed to work on the Kali Linux distribution. It runs well on Python version 2.7.13
+
 ## Modes
 
 There are several ways that you can use the backdoor hunting demo: user-mediated, learning, and autonomous mode. 
